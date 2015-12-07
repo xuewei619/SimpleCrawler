@@ -51,12 +51,10 @@ public class Crawler extends Thread{
 		while (matcher.find()) {
 			String newUrl = matcher.group(1);
 			if (past.add(newUrl)) {
-				if (newUrl.indexOf("http://") != -1) {
-					queue.add(newUrl);
-				} else {
+				if (newUrl.indexOf("http://") == -1) {
 					newUrl = initUrl + newUrl;
-					queue.add(newUrl);
 				}
+				queue.add(newUrl);
 				System.out.println(threadName + " : " + newUrl);
 			}
 		}
