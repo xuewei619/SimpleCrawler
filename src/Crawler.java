@@ -15,21 +15,27 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 @SuppressWarnings("deprecation")
-public class Crawler extends Thread{
-	private final static String initUrl = "http://www.hhu.edu.cn";
+public class Crawler {
+	private String initUrl;
 	private static BlockingQueue<String> queue = new LinkedBlockingQueue<String>();
 	private static HashSet<String> past = new HashSet<String>();
 	
-	private  String threadName;
 	
-	public Crawler(String threadName){
-		this.threadName = threadName;
-	}
 	
-	public static void init(){
+	public Crawler(String Url){		
+		this.initUrl = Url;
 		queue.add(initUrl);
 		past.add(initUrl);
 	}
+	
+	public void setInitUrl(String initUrl){
+		this.initUrl = initUrl;
+	}
+	
+	public String getInitUrl(){
+		return this.initUrl;
+	}
+	
 	
 	
 	@SuppressWarnings("resource")
@@ -45,45 +51,25 @@ public class Crawler extends Thread{
 		return EntityUtils.toString(entity, "utf-8");
 	}
 	
-	public void addUrl(String html){
+	public void addUrl(String html,String threadName){
 		Pattern pattern = Pattern.compile("<a[\\s\\S]+?href=\"([\\s\\S]+?)\"[\\s\\S]*?>[\\s\\S]*?</a>");
 		Matcher matcher = pattern.matcher(html.toString());
 		while (matcher.find()) {
 			String newUrl = matcher.group(1);
 			if (past.add(newUrl)) {
-				if (newUrl.indexOf("http://") != -1) {
-					queue.add(newUrl);
-				} else {
+				if (newUrl.indexOf("http://") == -1) {
 					newUrl = initUrl + newUrl;
-					queue.add(newUrl);
 				}
-				System.out.println(threadName + " : " + newUrl);
+				queue.add(newUrl);
+				System.out.println(threadName + ":" + newUrl);
 			}
 		}
 
 	}
 	
-	@Override
-	public void run() {
-		while (true) {
-			try {
-				if(queue.isEmpty()){
-					break;
-				}
-				String html = getHtml(queue.poll());
-				addUrl(html);
-			} catch (Exception e) {
-				continue;
-			}
-		}
+	public void execute(){
+		CrawlerThread thread = new CrawlerThread(this);
+		thread.start();
 	}
 	
-
-	public static void main(String[] args) {
-		init();
-		Crawler haha = new Crawler("A");
-		Crawler hehe = new Crawler("B");
-		haha.start();
-		hehe.start();
-	}
 }
