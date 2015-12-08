@@ -61,7 +61,11 @@ public class Crawler {
 					newUrl = initUrl + newUrl;
 				}
 				queue.add(newUrl);
+<<<<<<< HEAD
 				System.out.println(threadName + ":" + newUrl);
+=======
+				System.out.println(threadName + " : " + newUrl);
+>>>>>>> 911270e09a01846c8cda073a5183de2b5491bf62
 			}
 		}
 
