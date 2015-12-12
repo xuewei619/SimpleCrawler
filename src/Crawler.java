@@ -53,7 +53,7 @@ public class Crawler {
 	
 	public void addUrl(String html,String threadName){
 		Pattern pattern = Pattern.compile("<a[\\s\\S]+?href=\"([\\s\\S]+?)\"[\\s\\S]*?>[\\s\\S]*?</a>");
-		Matcher matcher = pattern.matcher(html.toString());
+		Matcher matcher = pattern.matcher(html);
 		while (matcher.find()) {
 			String newUrl = matcher.group(1);
 			if (past.add(newUrl)) {
@@ -61,14 +61,14 @@ public class Crawler {
 					newUrl = initUrl + newUrl;
 				}
 				queue.add(newUrl);
-				System.out.println(threadName + ":" + newUrl);
+				//System.out.println(threadName + ":" + newUrl);
 			}
 		}
 
 	}
 	
-	public void execute(){
-		CrawlerThread thread = new CrawlerThread(this);
+	public void execute(SomeElse someElse){
+		CrawlerThread thread = new CrawlerThread(this,someElse);
 		thread.start();
 	}
 	
