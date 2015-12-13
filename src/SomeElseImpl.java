@@ -1,3 +1,5 @@
+package com.main;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -44,6 +46,14 @@ public class SomeElseImpl implements SomeElse {
 			map.put("description", description);
 		}
 		return map;
+	}
+
+	@Override
+	public String getBody(String html) {
+		String body_regex = "<body>([\\s\\S]*?)</body>";
+		String body = getMatcherString(body_regex, html);		
+		String temp = body.replaceAll(" |\n|\t|\r", "");		
+		return temp.replaceAll("<[^>]*>", " ");
 	}
 
 }
