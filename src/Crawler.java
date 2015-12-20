@@ -1,3 +1,5 @@
+package com.main;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.concurrent.BlockingQueue;
@@ -17,13 +19,20 @@ import org.apache.http.util.EntityUtils;
 @SuppressWarnings("deprecation")
 public class Crawler {
 	private String initUrl;
+	
+	private String srcUrl;
+	
+	private String currentUrl;
+	
 	private static BlockingQueue<String> queue = new LinkedBlockingQueue<String>();
+	
 	private static HashSet<String> past = new HashSet<String>();
 	
 	
 	
-	public Crawler(String Url){		
+	public Crawler(String Url,String srcUrl){		
 		this.initUrl = Url;
+		this.srcUrl = srcUrl;
 		queue.add(initUrl);
 		past.add(initUrl);
 	}
@@ -37,9 +46,38 @@ public class Crawler {
 	}
 	
 	
+	public String getSrcUrl() {
+		return srcUrl;
+	}
+
+	public void setSrcUrl(String srcUrl) {
+		this.srcUrl = srcUrl;
+	}
+
+	public String getCurrentUrl() {
+		return currentUrl;
+	}
+
+	public void setCurrentUrl(String currentUrl) {
+		this.currentUrl = currentUrl;
+	}	
+
+	public static BlockingQueue<String> getQueue() {
+		return queue;
+	}
+
+	public static void setQueue(BlockingQueue<String> queue) {
+		Crawler.queue = queue;
+	}
+
+	public String preHandler(String url){
+		return url;
+	}
+	
 	
 	@SuppressWarnings("resource")
 	public  String getHtml(String Url) throws ParseException, IOException{
+		setCurrentUrl(Url);
 		HttpClient client = new DefaultHttpClient();		
 		HttpGet get = new HttpGet(Url);
 		
@@ -51,24 +89,28 @@ public class Crawler {
 		return EntityUtils.toString(entity, "utf-8");
 	}
 	
-	public void addUrl(String html,String threadName){
+	public void addUrl(String html){
 		Pattern pattern = Pattern.compile("<a[\\s\\S]+?href=\"([\\s\\S]+?)\"[\\s\\S]*?>[\\s\\S]*?</a>");
 		Matcher matcher = pattern.matcher(html);
 		while (matcher.find()) {
 			String newUrl = matcher.group(1);
 			if (past.add(newUrl)) {
-				if (newUrl.indexOf("http://") == -1) {
-					newUrl = initUrl + newUrl;
-				}
-				queue.add(newUrl);
-				//System.out.println(threadName + ":" + newUrl);
+				newUrl = preHandler(newUrl);
+				if(!"".equals(newUrl)){
+					if (newUrl.indexOf("http://") == -1) {
+						newUrl = srcUrl + newUrl;
+					}
+					queue.add(newUrl);
+					//System.out.println(newUrl);
+				}				
 			}
 		}
 
 	}
 	
-	public void execute(SomeElse someElse){
-		CrawlerThread thread = new CrawlerThread(this,someElse);
+	public void execute(Details details){
+		
+		CrawlerThread thread = new CrawlerThread(this,details);
 		thread.start();
 	}
 	

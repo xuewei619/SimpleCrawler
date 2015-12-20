@@ -1,3 +1,4 @@
+package com.main;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class JDBCUtil {
 
-	private final static String url = "xxx";
+	private final static String url = "jdbc:mysql://192.168.1.8:3306/web_info";
 
 	private final static String username = "root";
 
