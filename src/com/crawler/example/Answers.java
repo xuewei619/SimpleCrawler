@@ -1,4 +1,4 @@
-package com.main;
+package com.crawler.example;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.crawler.core.Crawler;
+import com.crawler.core.Details;
+import com.crawler.util.JDBCUtil;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 public class Answers implements Details {

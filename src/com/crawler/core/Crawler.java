@@ -1,4 +1,4 @@
-package com.main;
+package com.crawler.core;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -24,9 +24,9 @@ public class Crawler {
 	
 	private String currentUrl;
 	
-	private static BlockingQueue<String> queue = new LinkedBlockingQueue<String>();
+	public static BlockingQueue<String> queue = new LinkedBlockingQueue<String>();
 	
-	private static HashSet<String> past = new HashSet<String>();
+	public static HashSet<String> past = new HashSet<String>();
 	
 	
 	

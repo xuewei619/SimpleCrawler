@@ -1,4 +1,6 @@
-package com.main;
+package com.crawler.example;
+
+import com.crawler.core.Details;
 
 public class Test {
 	

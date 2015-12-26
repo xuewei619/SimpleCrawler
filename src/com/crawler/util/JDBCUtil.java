@@ -1,4 +1,4 @@
-package com.main;
+package com.crawler.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

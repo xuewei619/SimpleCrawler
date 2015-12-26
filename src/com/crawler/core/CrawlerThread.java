@@ -1,12 +1,9 @@
-package com.main;
+package com.crawler.core;
 
 public class CrawlerThread extends Thread {
 	private Crawler crawler;
 	
 	private Details details;
-	
-	//private String name;
-	
 
 	
 	public CrawlerThread(Crawler crawler,Details details) {
